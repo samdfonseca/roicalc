@@ -9,8 +9,17 @@
   "membership_growth": 10,
   "purchasing_members": 50,
   "engagement_points": 300,
-  "lift_to_spend": 5,
-  "redemption_rate": 25,
-  "point_expiry_rate": 50,
+  "lift_to_spend_range": {
+    "high": 7,
+    "low": 3
+  },
+  "redemption_rate_range": {
+    "high": 30,
+    "low": 20
+  },
+  "point_expiry_rate_range": {
+    "high": 60,
+    "low": 40
+  },
   "program_costs": [400000, 300000, 300000]
 }
