@@ -1,8 +1,9 @@
 package model
 
 type Range struct {
-	High float64 `json:"high"`
-	Low  float64 `json:"low"`
+	Distribution string  `json:"distribution"`
+	High         float64 `json:"high"`
+	Low          float64 `json:"low"`
 }
 
 type Assumption struct {
