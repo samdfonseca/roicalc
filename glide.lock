@@ -1,0 +1,8 @@
+hash: b2286fc6aaf900033147dbeec1ae67a81a9aadc9dfd18b2138dcb8cd351f3660
+updated: 2017-10-27T10:02:55.087865513-04:00
+imports:
+- name: github.com/gorilla/mux
+  version: 24fca303ac6da784b9e8269f724ddeb0b2eea5e7
+- name: github.com/urfave/negroni
+  version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
+testImports: []
