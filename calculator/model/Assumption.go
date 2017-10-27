@@ -1,5 +1,7 @@
 package model
 
+import "math/rand"
+
 type Range struct {
 	Distribution string  `json:"distribution"`
 	High         float64 `json:"high"`
@@ -25,3 +27,39 @@ type Assumption struct {
 	PointExpiryRateRange      Range     `json:"point_expiry_rate_range"`
 	ProgramCosts              []float64 `json:"program_costs"`
 }
+
+
+func normal(r Range) float64{
+
+	mean := r.Low +  (r.High - r.Low)/2
+	stdev := (mean - r.Low) /2
+	result := rand.NormFloat64()*stdev + mean
+	for result > r.High || result < r.Low {
+		result = rand.NormFloat64()*stdev + mean
+	}
+	return result
+}
+
+func uniform(r Range) float64{
+	return r.Low + rand.Float64() * (r.High -r.Low)
+}
+
+func (r Range) GenerateVal() float64{
+
+	switch r.Distribution {
+	case "uniform":
+		return uniform(r)
+	case "normal":
+		return normal(r)
+	}
+}
+
+func Randomlize(assumption Assumption) Assumption{
+	assumption.LiftToSpend = assumption.LiftToSpendRange.GenerateVal()
+	assumption.Redemption = assumption.RedemptionRateRange.GenerateVal()
+	assumption.PointExpiryRate = assumption.PointExpiryRateRange.GenerateVal()
+	return assumption
+}
+
+
+

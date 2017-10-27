@@ -2,6 +2,8 @@ package calculator
 
 import (
 	"github.com/samdfonseca/roicalc/calculator/model"
+	"gonum.org/v1/gonum/stat"
+	"math"
 )
 
 type ROICalculator struct {
@@ -66,4 +68,40 @@ func (r ROICalculator) Calculate(assumption model.Assumption) model.ROICalculati
 		result = append(result, calculateYearlyROI(&result[i-1], assumption, i))
 	}
 	return result
+}
+
+
+func (r ROICalculator) CalculateROIMatrix(a model.Assumption) [][]float64{
+	var results [][]float64
+	var result, result2 []float64
+	var firstROI, secondROI, thirdROI []float64
+	iteration := 1000
+	for i := 0;  i < iteration; i ++ {
+		 roiResult :=  r.Calculate(model.Randomlize(a))
+		 firstROI = append(firstROI, roiResult[0].ProgramROI)
+		 secondROI = append(secondROI, roiResult[1].ProgramROI)
+		 thirdROI = append(thirdROI, roiResult[2].ProgramROI)
+	 }
+	 result = append(result, stat.Mean(firstROI, nil))
+	result = append(result, stat.Mean(secondROI, nil))
+	result = append(result, stat.Mean(thirdROI, nil))
+	result2 = append(result2, math.Sqrt(stat.Variance(firstROI, nil)))
+	result2 = append(result2, math.Sqrt(stat.Variance(secondROI, nil)))
+	result2 = append(result2, math.Sqrt(stat.Variance(thirdROI, nil)))
+
+	results = append(results, result)
+	results = append(results, result2)
+	return results
+	/*
+	 for y := 0; y < 2 ; y++ {
+		 tSum:= 0.0
+		 stdev :=0.0
+		 for i := 0; i < iteration; i++ {
+		 	tSum += roiResults[i][y].ProgramROI;
+		 	stdev +=
+		 }
+		 result = append(result, tSum/float64(iteration))
+		result2 = append(result, )
+
+	 }*/
 }
