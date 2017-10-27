@@ -9,6 +9,8 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"github.com/samdfonseca/roicalc/calculator"
+	"github.com/samdfonseca/roicalc/calculator/model"
 )
 
 type ParamsBody struct {
@@ -41,7 +43,7 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Error reading request body"))
 		return
 	}
-	var paramsBody ParamsBody
+	var paramsBody model.Assumption
 	err = json.Unmarshal(body, &paramsBody)
 	if err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
@@ -50,7 +52,10 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	spew.Dump(paramsBody)
+	var calc calculator.ROICalculator
+	res := calc.Calculate(paramsBody)
+
+	spew.Dump(res)
 }
 
 func main() {

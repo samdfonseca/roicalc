@@ -2,7 +2,6 @@ package calculator
 
 import (
 	"github.com/samdfonseca/roicalc/calculator/model"
-	"go/types"
 )
 
 type ROICalculator struct {
@@ -19,17 +18,17 @@ func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.
 	result.Membership.PurchasingMembers = result.Membership.Total *
 		result.Membership.PercentagePurchasing
 	//Purchases
-	result.Purchases.BaselineAnnualSpend = assumption.Aov * assumption.PurchasePerYear;
+	result.Purchases.BaselineAnnualSpend = assumption.Aov * assumption.PurchasePerYear
 	result.Purchases.LoyaltyAnnualSpend = result.Purchases.BaselineAnnualSpend *
 		assumption.LiftToSpend
 	result.Purchases.IncreaseInAnnualSpend = result.Purchases.LoyaltyAnnualSpend -
 		result.Purchases.BaselineAnnualSpend
 	//Points
 	//Earned
-	result.Points.Earned.EngagementPoints = assumption.EngagementPointsPerMember;
+	result.Points.Earned.EngagementPoints = assumption.EngagementPointsPerMember
 	result.Points.Earned.PurchasePoints = result.Points.Earned.EngagementPoints * assumption.PointPerDollarSpend
 	result.Points.Earned.PointsEarnedInYear = result.Points.Earned.EngagementPoints*result.Membership.Total + result.Points.Earned.PurchasePoints*result.Membership.PurchasingMembers
-	if previousYear == nil {
+	if previousYear != nil {
 		result.Points.Earned.RedeemablePointsAvailable = previousYear.Points.Earned.PointsEarnedInYear + result.Points.Earned.RedeemablePointsAvailable
 	} else {
 		result.Points.Earned.RedeemablePointsAvailable = result.Points.Earned.PointsEarnedInYear
@@ -57,10 +56,10 @@ func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.
 }
 
 func (r ROICalculator) Calculate(assumption model.Assumption) model.ROICalculationResult {
-	var result model.ROICalculationResult
-	result[0] = calculateYearlyROI(nil, assumption, 1);
+	result := model.ROICalculationResult{}
+	result = append(result, calculateYearlyROI(nil, assumption, 1))
 	for i := 1; i < 3; i++ {
-		result[i] = calculateYearlyROI(&result[i-1], assumption, i);
+		result = append(result, calculateYearlyROI(&result[i-1], assumption, i))
 	}
 	return result
 }
