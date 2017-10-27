@@ -13,21 +13,9 @@ import (
 	"github.com/samdfonseca/roicalc/calculator/model"
 )
 
-type ParamsBody struct {
-	AOV                 int     `json:"aov"`
-	PurchasePerYear     float64 `json:"purchase_per_year"`
-	PointsPerSpend      int     `json:"points_per_spend"`
-	DollarPointsValue   float64 `json:"dollar_point_value"`
-	DiscountToRewards   int     `json:"discount_to_rewards"`
-	MemberMarketingCost float64 `json:"member_marketing_cost"`
-	StartingMembers     int     `json:"starting_members"`
-	MembershipGrowth    int     `json:"membership_growth"`
-	PurchasingMembers   int     `json:"purchasing_members"`
-	EngagementPoints    int     `json:"engagement_points"`
-	LiftToSpend         int     `json:"lift_to_spend"`
-	RedemptionRate      int     `json:"redemption_rate"`
-	PointExpiryRate     int     `json:"point_expiry_rate"`
-	ProgramCosts        []int   `json:"program_costs"`
+type ROIResponse struct {
+	RoiMean              []float64 `json:"roi_mean"`
+	RoiStandardDeviation []float64 `json:"roi_standard_deviation"`
 }
 
 func baseHandler(w http.ResponseWriter, r *http.Request) {
@@ -54,8 +42,16 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 
 	var calc calculator.ROICalculator
 	res := calc.Calculate(paramsBody)
-
 	spew.Dump(res)
+	var roi_mean []float64
+	roi_mean = append(roi_mean, res[0].ProgramROI)
+	roi_mean = append(roi_mean, res[1].ProgramROI)
+	roi_mean = append(roi_mean, res[2].ProgramROI)
+	roi := ROIResponse{
+		RoiMean: roi_mean,
+	}
+	resp, _ := json.Marshal(roi)
+	w.Write(resp)
 }
 
 func main() {
