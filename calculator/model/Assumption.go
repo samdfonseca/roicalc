@@ -21,6 +21,6 @@ type Assumption struct {
 	Redemption                float64   `json:"redemption_rate"`
 	RedemptionRateRange       Range     `json:"redemption_rate_range"`
 	PointExpiryRate           float64   `json:"point_expiry_rate"`
-	PointExpirtRateRange      Range     `json:"point_expiry_rate_range"`
+	PointExpiryRateRange      Range     `json:"point_expiry_rate_range"`
 	ProgramCosts              []float64 `json:"program_costs"`
 }
