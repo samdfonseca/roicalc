@@ -15,21 +15,18 @@ func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.
 	var rate float64
 	// Membership
 	if previousYear == nil {
-		rate = 0
+		result.Membership.Total = assumption.MembershipStartingLevel
 	} else {
-		rate = assumption.MembershipGrowth / 100
+		rate = 1+  (assumption.MembershipGrowth / 100 )
+		result.Membership.Total = previousYear.Membership.Total * rate
 	}
 
-	result.Membership.Total = assumption.MembershipStartingLevel * (1 + rate)
 	result.Membership.PercentagePurchasing = assumption.PurchasingMembers /100
-	result.Membership.PurchasingMembers = result.Membership.Total *
-		result.Membership.PercentagePurchasing
+	result.Membership.PurchasingMembers = result.Membership.Total * result.Membership.PercentagePurchasing
 	//Purchases
 	result.Purchases.BaselineAnnualSpend = assumption.Aov * assumption.PurchasePerYear
-	result.Purchases.LoyaltyAnnualSpend = result.Purchases.BaselineAnnualSpend *
-		assumption.LiftToSpend /100
-	result.Purchases.IncreaseInAnnualSpend = result.Purchases.LoyaltyAnnualSpend -
-		result.Purchases.BaselineAnnualSpend
+	result.Purchases.LoyaltyAnnualSpend = result.Purchases.BaselineAnnualSpend *  (1 + assumption.LiftToSpend / 100)
+	result.Purchases.IncreaseInAnnualSpend = result.Purchases.LoyaltyAnnualSpend - result.Purchases.BaselineAnnualSpend
 	//Points
 	//Earned
 	result.Points.Earned.EngagementPoints = assumption.EngagementPointsPerMember
