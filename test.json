@@ -1,0 +1,16 @@
+{
+  "aov": 82,
+  "purchase_per_year": 1.7,
+  "points_per_spend": 10,
+  "dollar_point_value": 0.05,
+  "discount_to_rewards": 10,
+  "member_marketing_cost": 0.10,
+  "starting_members": 150000,
+  "membership_growth": 10,
+  "purchasing_members": 50,
+  "engagement_points": 300,
+  "lift_to_spend": 5,
+  "redemption_rate": 25,
+  "point_expiry_rate": 50,
+  "program_costs": [400000, 300000, 300000]
+}

@@ -1,5 +1,10 @@
 package model
 
+type Range struct {
+	High float64 `json:"high"`
+	Low  float64 `json:"low"`
+}
+
 type Assumption struct {
 	Aov                       float64   `json:"aov"`
 	PurchasePerYear           float64   `json:"purchase_per_year"`
@@ -12,7 +17,10 @@ type Assumption struct {
 	PurchasingMembers         float64   `json:"purchasing_members"`
 	EngagementPointsPerMember float64   `json:"engagement_points"`
 	LiftToSpend               float64   `json:"lift_to_spend"`
+	LiftToSpendRange          Range     `json:"lift_to_spend_range"`
 	Redemption                float64   `json:"redemption_rate"`
+	RedemptionRateRange       Range     `json:"redemption_rate_range"`
 	PointExpiryRate           float64   `json:"point_expiry_rate"`
+	PointExpirtRateRange      Range     `json:"point_expiry_rate_range"`
 	ProgramCosts              []float64 `json:"program_costs"`
 }
