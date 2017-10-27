@@ -12,15 +12,22 @@ type ROICalculator struct {
 
 func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.Assumption, yearIndex int) model.CalculationResult {
 	var result model.CalculationResult
+	var rate float64
 	// Membership
-	result.Membership.Total = assumption.MembershipStartingLevel
-	result.Membership.PercentagePurchasing = assumption.PurchasingMembers
+	if previousYear == nil {
+		rate = 0
+	} else {
+		rate = assumption.MembershipGrowth / 100
+	}
+
+	result.Membership.Total = assumption.MembershipStartingLevel * (1 + rate)
+	result.Membership.PercentagePurchasing = assumption.PurchasingMembers /100
 	result.Membership.PurchasingMembers = result.Membership.Total *
 		result.Membership.PercentagePurchasing
 	//Purchases
 	result.Purchases.BaselineAnnualSpend = assumption.Aov * assumption.PurchasePerYear
 	result.Purchases.LoyaltyAnnualSpend = result.Purchases.BaselineAnnualSpend *
-		assumption.LiftToSpend
+		assumption.LiftToSpend /100
 	result.Purchases.IncreaseInAnnualSpend = result.Purchases.LoyaltyAnnualSpend -
 		result.Purchases.BaselineAnnualSpend
 	//Points
@@ -34,14 +41,14 @@ func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.
 		result.Points.Earned.RedeemablePointsAvailable = result.Points.Earned.PointsEarnedInYear
 	}
 	//Burned
-	result.Points.Burned.PointsRedeemed = result.Points.Earned.RedeemablePointsAvailable * assumption.Redemption
-	result.Points.Burned.PointsExpired = result.Points.Earned.PointsEarnedInYear * assumption.PointExpiryRate
+	result.Points.Burned.PointsRedeemed = result.Points.Earned.RedeemablePointsAvailable * assumption.Redemption /100
+	result.Points.Burned.PointsExpired = result.Points.Earned.PointsEarnedInYear * assumption.PointExpiryRate / 100
 
 	result.Points.EOYOutstandingPointsLiablity = result.Points.Earned.RedeemablePointsAvailable - result.Points.Burned.PointsExpired - result.Points.Burned.PointsRedeemed
 
 	//Program Cost
 	result.ProgramCosts.RedemptionCost = result.Points.Burned.PointsRedeemed *
-		assumption.DollarValuePerPoint * assumption.DiscountToRewards
+		assumption.DollarValuePerPoint * assumption.DiscountToRewards / 100
 	result.ProgramCosts.ProgramLicenseCost = assumption.ProgramCosts[yearIndex]
 	result.ProgramCosts.ProgramMarketingCost = result.Membership.Total * assumption.AnnualPerMemberMarketCost
 
