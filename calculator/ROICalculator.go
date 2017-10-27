@@ -11,7 +11,7 @@ type ROICalculator struct {
 	ThirdYearROIResult  model.CalculationResult
 }
 
-func calculateYearlyROI(previousYear model.CalculationResult, assumption model.Assumption, yearIndex int) model.CalculationResult {
+func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.Assumption, yearIndex int) model.CalculationResult {
 	var result model.CalculationResult
 	// Membership
 	result.Membership.Total = assumption.MembershipStartingLevel
@@ -29,7 +29,7 @@ func calculateYearlyROI(previousYear model.CalculationResult, assumption model.A
 	result.Points.Earned.EngagementPoints = assumption.EngagementPointsPerMember;
 	result.Points.Earned.PurchasePoints = result.Points.Earned.EngagementPoints * assumption.PointPerDollarSpend
 	result.Points.Earned.PointsEarnedInYear = result.Points.Earned.EngagementPoints*result.Membership.Total + result.Points.Earned.PurchasePoints*result.Membership.PurchasingMembers
-	if previousYear != nil {
+	if previousYear == nil {
 		result.Points.Earned.RedeemablePointsAvailable = previousYear.Points.Earned.PointsEarnedInYear + result.Points.Earned.RedeemablePointsAvailable
 	} else {
 		result.Points.Earned.RedeemablePointsAvailable = result.Points.Earned.PointsEarnedInYear
@@ -60,7 +60,7 @@ func (r ROICalculator) Calculate(assumption model.Assumption) model.ROICalculati
 	var result model.ROICalculationResult
 	result[0] = calculateYearlyROI(nil, assumption, 1);
 	for i := 1; i < 3; i++ {
-		result[i] = calculateYearlyROI(result[i-1], assumption, i);
+		result[i] = calculateYearlyROI(&result[i-1], assumption, i);
 	}
 	return result
 }
