@@ -1,8 +1,16 @@
-hash: b2286fc6aaf900033147dbeec1ae67a81a9aadc9dfd18b2138dcb8cd351f3660
-updated: 2017-10-27T10:02:55.087865513-04:00
+hash: 93056cda30198a34b085f6f341ddb0a1db7c1e3d6a2fee0f63c6c02947834236
+updated: 2017-10-27T12:14:17.930146155-04:00
 imports:
+- name: github.com/davecgh/go-spew
+  version: 346938d642f2ec3594ed81d874461961cd0faa76
+  subpackages:
+  - spew
+- name: github.com/gorilla/context
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
   version: 24fca303ac6da784b9e8269f724ddeb0b2eea5e7
+- name: github.com/rs/cors
+  version: 7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6
 - name: github.com/urfave/negroni
   version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
 testImports: []
