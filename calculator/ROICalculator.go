@@ -30,16 +30,16 @@ func calculateYearlyROI(previousYear *model.CalculationResult, assumption model.
 	//Points
 	//Earned
 	result.Points.Earned.EngagementPoints = assumption.EngagementPointsPerMember
-	result.Points.Earned.PurchasePoints = result.Points.Earned.EngagementPoints * assumption.PointPerDollarSpend
+	result.Points.Earned.PurchasePoints = result.Purchases.LoyaltyAnnualSpend * assumption.PointPerDollarSpend
 	result.Points.Earned.PointsEarnedInYear = result.Points.Earned.EngagementPoints*result.Membership.Total + result.Points.Earned.PurchasePoints*result.Membership.PurchasingMembers
 	if previousYear != nil {
-		result.Points.Earned.RedeemablePointsAvailable = previousYear.Points.Earned.PointsEarnedInYear + result.Points.Earned.RedeemablePointsAvailable
+		result.Points.Earned.RedeemablePointsAvailable = result.Points.Earned.PointsEarnedInYear + previousYear.Points.EOYOutstandingPointsLiablity
 	} else {
 		result.Points.Earned.RedeemablePointsAvailable = result.Points.Earned.PointsEarnedInYear
 	}
 	//Burned
 	result.Points.Burned.PointsRedeemed = result.Points.Earned.RedeemablePointsAvailable * assumption.Redemption /100
-	result.Points.Burned.PointsExpired = result.Points.Earned.PointsEarnedInYear * assumption.PointExpiryRate / 100
+	result.Points.Burned.PointsExpired = result.Points.Earned.RedeemablePointsAvailable * assumption.PointExpiryRate / 100
 
 	result.Points.EOYOutstandingPointsLiablity = result.Points.Earned.RedeemablePointsAvailable - result.Points.Burned.PointsExpired - result.Points.Burned.PointsRedeemed
 
